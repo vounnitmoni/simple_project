@@ -1,0 +1,21 @@
+version: '3'
+services:
+  web_api:
+    extends:
+      file: ../api/compose.yml
+      service: api
+
+  web:
+    image: node:20.10-alpine
+    working_dir: /app
+    command:
+      - npm
+      - run
+      - dev
+      - --prefix ../web
+    volumes:
+      - ../web:/app
+
+networks:
+  laravel:
+    driver: bridge
