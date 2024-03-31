@@ -7,7 +7,7 @@ relationships between the User, Role, and Permission models.
 * Role: Defines a set of permissions granted to users. Roles include categories such as "Moderator," "Contributor," and "Regular User."
 * Permission: Specifies the actions or functionalities that users with specific roles can perform. Permissions may include create post, delete post, comment post, vote post etc.
 #### __Interface for Role and Permission Management:__
-Develop an intuitive user interface within the platform for community admin for managing roles and permissions. This interface should allow  comunity administrators to:
+Develop an intuitive user interface within the platform for community admin for managing roles and permissions via __Keycloak__. This interface should allow  comunity administrators to:
 * Create, edit, and delete roles.
 * Assign or revoke permissions for each role.
 * Assign or remove roles for individual users.
@@ -15,5 +15,20 @@ Develop an intuitive user interface within the platform for community admin for 
 
 By implementing effective user management practices and role-based access control, the Knowledge Sharing Platform aims to promote a safe and engaging environment for knowledge sharing while ensuring compliance with relevant data privacy and security regulations.
 
-This project will be built using the Laravel framework, leveraging its robust authentication system, Eloquent ORM for defining relationships between models, middleware functionality for access control, and Blade templating engine for user interface development. Additionally, the platform will prioritize mobile responsiveness to cater to users accessing the forum from various devices.
+This project will be built using the __Laravel__ framework, leveraging its robust authentication system, Eloquent ORM for defining relationships between models, middleware functionality for access control, and __Nextjs__ for user interface development. Additionally, the platform will prioritize mobile responsiveness to cater to users accessing the forum from various devices.
+
+In ER diagram, we have the following entities:
+* Users: this entity stores informaion about people using this platform, such as their username, firstname, lastname, date of birth,etc.
+* Roles: responsible for storing information about user roles, such as admin, co-admin, ordinary user,etc.
+* Follows: storing conection between users who follow each other like followers, followee.
+* Questionnairs: this entity stores questions from users.
+* Votes: this entity responsibles for votes to posted questions.
+* Answers: this entity is about storing aswers that user write to a post.
+
 ## Installation
+This project can be setup by the following command:
+> cd to config directory
+```
+make setup
+```  
+  
