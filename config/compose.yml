@@ -9,24 +9,37 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
-      - '443:443'
+      - '80:80'
       - '8080:8080'
     networks:
       default:
         aliases:
           - ${HOST_NAME}
 
-  web_api:
+  api:
     image: nitmoni/laravel:nginx-php-8.2
+    volumes:
+      - ../api:/var/www/html
     depends_on:
       - proxy
+      - api_db
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.web-api.rule=Host(`${HOST_NAME}`) && PathPrefix(`/api`)'
+      - 'traefik.http.routers.api.rule=Host(`${HOST_NAME}`) && PathPrefix(`/api`)'
       - 'traefik.http.middlewares.web-api-replacepath.replacepathregex.regex=^/api/(.*)'
       - 'traefik.http.middlewares.web-api-replacepath.replacepathregex.replacement=/$$1'
       - 'traefik.http.routers.web-api.middlewares=web-api-replacepath'
       - 'traefik.http.services.web_api.loadbalancer.server.port=80'
+
+  api_db:
+    image: mariadb:11.2
+    volumes:
+      - api_db_data:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: api
+      MARIADB_USER: api
+      MARIADB_PASSWORD: api
 
   web:
     image: node:20.10-alpine
@@ -44,3 +57,12 @@ services:
       - 'traefik.enable=true'
       - 'traefik.http.routers.web.rule=Host(`${HOST_NAME}`)'
       - 'traefik.http.services.web.loadbalancer.server.port=3000'
+
+  #For local development
+  adminer:
+    image: adminer
+    ports:
+      - 8060:8080
+
+volumes:
+  api_db_data:
