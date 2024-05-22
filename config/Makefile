@@ -13,6 +13,7 @@ endef
 setup:
 	$(MAKE) add-hosts
 	$(MAKE) web-setup
+	$(MAKE) api-setup
 
 	$(call echo_title, "Up docker with docker compose")
 	docker-compose up -d
@@ -36,3 +37,15 @@ web-setup:
 
 	$(call echo_title, "Install packages and dependencies")
 	docker-compose run --no-deps web yarn --frozen-lockfile
+
+api-setup:
+	$(call echo_title, "Install composer package dependencies")
+	docker-compose run --no-deps --rm --entrypoint="" api composer install
+
+	$(call echo_title, "Create .env")
+	@if [ -f "${apiPath}/.env" ]; then\
+		echo "* The .env is already exist";\
+	else\
+		cp ${apiPath}/.env.example ${apiPath}/.env;\
+		echo "* The .env is copied from .env.example";\
+	fi
